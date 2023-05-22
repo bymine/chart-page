@@ -8,17 +8,24 @@ interface Props {
 }
 
 export default function RegionFilter({ regions }: Props) {
-  const [, setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const currentRegion = searchParams.get('region');
 
   return (
     <FilterContainer>
       <Span>지역 선택:</Span>
       <div>
-        <button onClick={() => setSearchParams({})}>전체</button>
+        <Button checked={!currentRegion} onClick={() => setSearchParams({})}>
+          전체
+        </Button>
         {regions.map((region) => (
-          <button key={region} onClick={() => setSearchParams({ region })}>
+          <Button
+            checked={region === currentRegion}
+            key={region}
+            onClick={() => setSearchParams({ region })}>
             {region}
-          </button>
+          </Button>
         ))}
       </div>
     </FilterContainer>
@@ -44,3 +51,7 @@ const Span = styled.div({
   fontSize: '16px',
   marginRight: '20px',
 });
+
+const Button = styled.button<{ checked: boolean }>({}, (props) => ({
+  color: props.checked ? 'red' : 'black',
+}));
